@@ -1,39 +1,52 @@
 import './styles/style.css'
-import { currentDate, MIN_DAYS, MAX_DAYS, MIN_MONTHS, MAX_MONTHS, MIN_YEAR, MAX_YEAR } from './Dates/Dates'
+import { currentDate, currentDay, currentMonth, currentYear, monthDaysNum } from './Dates/Dates'
 
-const inputBox = <HTMLDivElement>document.querySelector('.box')
 const dayInput = <HTMLInputElement>document.getElementById('day')
 const monthInput = <HTMLInputElement>document.getElementById('month')
 const yearInput = <HTMLInputElement>document.getElementById('year')
 
-const ageYears = <HTMLSpanElement>document.querySelector('.age-years')
-const ageMonths = <HTMLSpanElement>document.querySelector('.age-months')
-const ageDays = <HTMLSpanElement>document.querySelector('.age-days')
+const yearsOutput = <HTMLSpanElement>document.querySelector('.age-years')
+const monthsOutput = <HTMLSpanElement>document.querySelector('.age-months')
+const daysOutput = <HTMLSpanElement>document.querySelector('.age-days')
 
 const showAgeBtn = <HTMLButtonElement>document.querySelector('.arrow-btn')
 
-console.log(currentDate)
+function validate(): void {
+	const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('input')
+	const error = <HTMLParagraphElement>document.querySelector('.error')
 
-// checking if spans get inputs value
-// showAgeBtn.addEventListener('click', (): void => {
-// 	if (!dayInput.value || !monthInput.value || !yearInput.value) return
-// 	ageDays.textContent = dayInput.value
-// 	ageMonths.textContent = monthInput.value
-// 	ageYears.textContent = yearInput.value
+	inputs.forEach(input => {
+		const closestError = input.parentElement?.querySelector('.error') ?? error
 
-// 	dayInput.value = monthInput.value = yearInput.value = ''
-// })
+		if (!input.value) {
+			input.style.borderColor = 'hsl(0, 100%, 67%)'
+			closestError.textContent = 'This field is required!'
+		} else {
+			const inputValue = Number(input.value)
 
-//try to do validation
-// const validateInputs = (): void => {
-// 	if (
-// 		yearInput.value > MAX_YEAR ||
-// 		(monthInput.value > MAX_MONTHS && monthInput.value < MIN_MONTHS) ||
-// 		(dayInput.value > MAX_DAYS && dayInput.value < MIN_DAYS)
-// 	) {
-// 		const error = document.createElement('p')
-// 		error.classList.add('error')
-// 		error.textContent = 'Uzupełnij poprawnie dane!'
-// 		inputBox.appendChild(error)
-// 	}
-// }
+			if (input === dayInput) {
+				if (inputValue < 1 || inputValue > 31) {
+					closestError.textContent = 'Must be a valid day!'
+				}
+				closestError.textContent = ''
+			} else if (input === monthInput) {
+				if (inputValue < 1 || inputValue > 12) {
+					closestError.textContent = 'Must be a valid month!'
+				}
+				closestError.textContent = ''
+			} else if (input === yearInput) {
+				if (inputValue < 1 || inputValue > 2023) {
+					closestError.textContent = 'Must be a valid year!'
+				}
+				closestError.textContent = ''
+			}
+			input.style.borderColor = 'hsl(0, 0%, 86%)'
+		}
+	})
+}
+
+
+
+showAgeBtn.addEventListener('click', validate)
+
+// wpisaną datę, odjąć od dzisiejszej daty, a wynik wyswietlic w poszczegolnych spanach outputowych
