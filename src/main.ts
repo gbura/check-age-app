@@ -35,7 +35,7 @@ function validate(): void {
 				}
 				closestError.textContent = ''
 			} else if (input === yearInput) {
-				if (inputValue < 1 || inputValue > 2023) {
+				if (inputValue < 1 || inputValue > currentYear) {
 					closestError.textContent = 'Must be a valid year!'
 				}
 				closestError.textContent = ''
