@@ -45,8 +45,9 @@ function validate(): void {
 	})
 }
 
-
-
-showAgeBtn.addEventListener('click', validate)
-
-// wpisaną datę, odjąć od dzisiejszej daty, a wynik wyswietlic w poszczegolnych spanach outputowych
+showAgeBtn.addEventListener('click', () => {
+	validate()
+	const birthDay: number = Number(dayInput.value)
+	const birthMonth: number = Number(monthInput.value)
+	const birthYear: number = Number(yearInput.value)
+})
