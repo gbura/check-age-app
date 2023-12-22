@@ -45,9 +45,16 @@ function validate(): void {
 	})
 }
 
-showAgeBtn.addEventListener('click', () => {
-	validate()
+function countAge() {
 	const birthDay: number = Number(dayInput.value)
 	const birthMonth: number = Number(monthInput.value)
 	const birthYear: number = Number(yearInput.value)
+
+	const birthDate: Date = new Date(birthYear, birthMonth - 1, birthDay)
+	console.log(birthDate)
+}
+
+showAgeBtn.addEventListener('click', () => {
+	validate()
+	countAge()
 })
