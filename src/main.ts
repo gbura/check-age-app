@@ -1,5 +1,7 @@
 import './styles/style.css'
-import { currentDate, currentDay, currentMonth, currentYear } from './Dates/Dates'
+import { currentDay, currentMonth, currentYear } from './Dates/Dates'
+
+let errorsArr: any = []
 
 const dayInput = <HTMLInputElement>document.getElementById('day')
 const monthInput = <HTMLInputElement>document.getElementById('month')
@@ -22,8 +24,8 @@ function validate(): void {
 	const birthDate: Date = new Date(birthYear, birthMonth - 1, birthDay)
 
 	const birthDayOutput = birthDate.getDate()
-	// const birthMonthOutput = birthDate.getMonth() + 1
-	// const birthYearOutput = birthDate.getFullYear()
+	errorsArr = []
+	console.log(errorsArr)
 
 	inputs.forEach(input => {
 		const closestError = input.parentElement?.querySelector('.error') ?? error
@@ -32,20 +34,19 @@ function validate(): void {
 
 		if (!input.value) {
 			input.style.borderColor = 'hsl(0, 100%, 67%)'
-			closestError.textContent = 'This field is required!'
 		} else {
 			const inputValue = Number(input.value)
 			if (input === dayInput) {
 				if (inputValue < 1 || inputValue > 31 || inputValue !== birthDayOutput) {
-					closestError.textContent = 'Must be a valid day!'
+					errorsArr.push({ id: 'error-day', message: 'Must be a valid day!' })
 				}
 			} else if (input === monthInput) {
 				if (inputValue < 1 || inputValue > 12) {
-					closestError.textContent = 'Must be a valid month!'
+					errorsArr.push({ id: 'error-month', message: 'Must be a valid month!' })
 				}
 			} else if (input === yearInput) {
 				if (inputValue < 1 || inputValue > currentYear) {
-					closestError.textContent = 'Must be a valid year!'
+					errorsArr.push({ id: 'error-year', message: 'Must be a valid year!' })
 				}
 			}
 			input.style.borderColor = 'hsl(0, 0%, 86%)'
@@ -57,13 +58,6 @@ function countAge() {
 	const birthDay: number = Number(dayInput.value)
 	const birthMonth: number = Number(monthInput.value)
 	const birthYear: number = Number(yearInput.value)
-
-	const birthDate: Date = new Date(birthYear, birthMonth - 1, birthDay)
-	console.log(birthDate)
-
-	// const birthDayOutput = birthDate.getDate()
-	// const birthMonthOutput = birthDate.getMonth() + 1
-	// const birthYearOutput = birthDate.getFullYear()
 
 	let ageYears = currentYear - birthYear
 	let ageMonths = currentMonth - birthMonth
@@ -87,15 +81,11 @@ function countAge() {
 
 showAgeBtn.addEventListener('click', () => {
 	validate()
-	const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('input')
-	const error = <HTMLParagraphElement>document.querySelector('.error')
-	inputs.forEach(input => {
-		const closestError = input.parentElement?.querySelector('.error') ?? error
-
-		if (closestError) {
-			return
-		} else {
-			countAge()
-		}
-	})
+	if (errorsArr.length > 0) {
+		errorsArr.forEach((error: { id: string; message: string }) => {
+			document.getElementById(error.id)!.textContent = error.message
+		})
+	} else {
+		countAge()
+	}
 })
