@@ -25,7 +25,6 @@ function validate(): void {
 
 	const birthDayOutput = birthDate.getDate()
 	errorsArr = []
-	console.log(errorsArr)
 
 	inputs.forEach(input => {
 		const closestError = input.parentElement?.querySelector('.error') ?? error
